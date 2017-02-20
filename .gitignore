@@ -1,0 +1,14 @@
+analyseur/*
+parser.ml
+parser.conflicts
+parser.automaton
+lexer.ml
+*.mli
+*.cmo
+*.o
+*.swp
+*.cmi
+*.cmx
+depend
+test
+

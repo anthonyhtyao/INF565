@@ -1,6 +1,6 @@
 open Format
 
-type inst = string
+type inst = string*int
 
 type oper =
   | Plus
@@ -34,24 +34,26 @@ let printOper o = match o with
   | Times -> printf " * "
   | And -> printf " && "
   | Or -> printf " || "
-  
+
+let string_of_inst i = "("^(fst i)^","^(string_of_int (snd i))^")"
+
 let rec printExp s = match s with
   | Cste c -> printCste c
-  | Inst i -> print_string i;
+  | Inst i -> print_string (string_of_inst i)
   | Oper (o,e1,e2) -> printExp e1;printOper o;printExp e2;print_newline ()
   | Appl (e1,e2) -> print_string "App ";
                     printExp e1;
                     printExp e2;
                     print_newline ()
-  | Fun (i,e) -> print_string ("fun "^i^" -> ");
+  | Fun (i,e) -> print_string ("fun "^(string_of_inst i)^" -> ");
                  printExp e;
                  print_newline ()
-  | Letrec (i1,i2,e1,e2) -> print_string ("let rec "^i1^" "^i2^" = ");
+  | Letrec (i1,i2,e1,e2) -> print_string ("let rec "^(string_of_inst i1)^" "^(string_of_inst i2)^" = ");
                             printExp e1;
                             printf " in@.";
                             printExp e2;
                             print_newline()
-  | Let (i,e1,e2)-> print_string ("let "^i^" = ");
+  | Let (i,e1,e2)-> print_string ("let "^(string_of_inst i)^" = ");
                     printExp e1;
                     printf " in@.";
                     printExp e2;
