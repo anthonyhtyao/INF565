@@ -1,5 +1,4 @@
 open Format
-open Syntax
 (*
 let () = 
   printExp (Inst("abc"))
@@ -16,7 +15,8 @@ let main () =
   let f_desc = open_in !f_name in
   let lexbuf = Lexing.from_channel f_desc in
   let prog = Parser.exp Lexer.token lexbuf in
-  printExp prog
+  Syntax.printExp prog;
+  Newsyntax.printExp (Newsyntax.of_exp prog)
 
 let () =
   main ()

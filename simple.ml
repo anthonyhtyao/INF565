@@ -2,5 +2,5 @@
  * *)
 let rec f y = fun y 
 -> True in
-let x = 5 in 
+let x = true || false in 
 x-3
