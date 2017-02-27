@@ -1,4 +1,5 @@
 open Format
+module Smap = Map.Make(String)
 
 type inst = string*int
 
@@ -57,3 +58,18 @@ let rec printExp s = match s with
                     printf " in@.";
                     printExp e2;
                     print_newline ()
+
+let cal_index exp =
+  let incre m = Smap.map (fun x->x+1) m in
+  let rec aux m = function
+    | Cste c -> Cste c
+    | Cond (e1,e2,e3) -> Cond(aux m e1,aux m e2, aux m e3) 
+    | Appl (e1,e2) -> Appl(aux m e1,aux m e2)
+    | Oper (o,e1,e2) -> Oper(o,aux m e1,aux m e2)
+    | Inst (i,_) -> let n = Smap.find i m in Inst(i,n)
+    | Fun (i,e) ->  Fun(i,aux (Smap.add (fst i) 0 (incre m)) e)
+    | Let (i,e1,e2) -> let mi = incre m in
+                       Let (i,aux m e1,aux (Smap.add (fst i) 0 mi) e2)
+    | a -> a
+    
+  in aux Smap.empty exp

@@ -16,7 +16,10 @@ let main () =
   let lexbuf = Lexing.from_channel f_desc in
   let prog = Parser.exp Lexer.token lexbuf in
   Syntax.printExp prog;
-  Newsyntax.printExp (Newsyntax.of_exp prog)
+  let new_prog = Newsyntax.of_exp prog in
+  Newsyntax.printExp new_prog;
+  let ind = Newsyntax.cal_index new_prog in
+  Newsyntax.printExp ind
 
 let () =
   main ()
