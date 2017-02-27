@@ -70,6 +70,7 @@ let cal_index exp =
     | Fun (i,e) ->  Fun(i,aux (Smap.add (fst i) 0 (incre m)) e)
     | Let (i,e1,e2) -> let mi = incre m in
                        Let (i,aux m e1,aux (Smap.add (fst i) 0 mi) e2)
-    | a -> a
+    | Letrec (i1,i2,e1,e2) -> let mi = Smap.add (fst i1) 0 (incre m) in
+                    Letrec (i1,i2,aux (Smap.add (fst i2) 0 (incre mi)) e1,aux mi e2)
     
   in aux Smap.empty exp
