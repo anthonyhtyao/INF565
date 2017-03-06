@@ -24,13 +24,13 @@ let lift_array t l = List.fold_left (fun t' () -> Array_type t') t l
 %%
 
 exp:
-| IDENTIFIER {Inst(fst $1,0)}
+| IDENTIFIER {Inst(fst $1)}
 | constant {Cste($1)}
 | exp operation exp {Oper($2,$1,$3)}
 | exp exp {Appl($1,$2)}
-| FUN IDENTIFIER ARROW exp {Fun((fst $2,0),$4)}
-| LET REC IDENTIFIER IDENTIFIER EQ exp IN exp {Letrec((fst $3,0),(fst $4,0),$6,$8)}
-| LET IDENTIFIER EQ exp IN exp {Let((fst $2,0),$4,$6)}
+| FUN IDENTIFIER ARROW exp {Fun((fst $2),$4)}
+| LET REC IDENTIFIER IDENTIFIER EQ exp IN exp {Letrec((fst $3),(fst $4),$6,$8)}
+| LET IDENTIFIER EQ exp IN exp {Let((fst $2),$4,$6)}
 
 operation:
 | ANDAND {And}

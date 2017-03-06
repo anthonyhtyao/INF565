@@ -3,6 +3,10 @@ module Smap = Map.Make(String)
 
 type inst = string*int
 
+type valeur = | Cste of Syntax.cste | Fun of inst*valeur
+
+type etat = valeur list
+
 type exp = 
   | Let of inst*exp*exp  (* lex x = e in e *)
   | Letrec of inst*inst*exp*exp (* let rec f x = e in e *)
@@ -14,14 +18,14 @@ type exp =
   | Cste of Syntax.cste
 
 let rec of_exp = function
-  | Syntax.Let(i,e1,e2) -> Let(i,of_exp e1,of_exp e2)
-  | Syntax.Letrec(i1,i2,e1,e2) -> Letrec(i1,i1,of_exp e1,of_exp e2)
-  | Syntax.Fun(i,e) -> Fun(i,of_exp e)
+  | Syntax.Let(i,e1,e2) -> Let((i,0),of_exp e1,of_exp e2)
+  | Syntax.Letrec(i1,i2,e1,e2) -> Letrec((i1,0),(i2,0),of_exp e1,of_exp e2)
+  | Syntax.Fun(i,e) -> Fun((i,0),of_exp e)
   | Syntax.Appl(e1,e2) -> Appl(of_exp e1, of_exp e2)
   | Syntax.Oper(Syntax.And,e1,e2) -> Cond(of_exp e1,of_exp e2, Cste(Syntax.False))
   | Syntax.Oper(Syntax.Or,e1,e2) -> Cond(of_exp e1,Cste(Syntax.True),of_exp e2)
   | Syntax.Oper(o,e1,e2) -> Oper(o,of_exp e1,of_exp e2)
-  | Syntax.Inst i  -> Inst(i)
+  | Syntax.Inst i  -> Inst((i,0))
   | Syntax.Cste c  -> Cste(c)
 
 let printCste c = Syntax.printCste c
@@ -74,3 +78,22 @@ let cal_index exp =
                     Letrec (i1,i2,aux (Smap.add (fst i2) 0 (incre mi)) e1,aux mi e2)
     
   in aux Smap.empty exp
+
+let interpretation exp =
+  let rec aux etat = function
+    | Cste c -> c
+    | Inst (i,n) -> List.nth etat n
+    | Cond (e1,e2,e3) -> begin 
+      match aux etat e1 with
+        | Syntax.True -> aux etat e2
+        | Syntax.False -> aux etat e3
+      end
+    | Oper (o,e1,e2) -> begin
+      let v1 = aux etat e1 in let v2 = aux etat e2 in 
+      match o with
+        | Syntax.Plus ->  Syntax.plus v1 v2
+        | Syntax.Minus -> Syntax.minus v1 v2
+        | Syntax.Times -> Syntax.times v1 v2
+      end
+    | Let (i,e1,e2) -> let v = aux etat e1 in aux (v::etat) e2
+  in aux [] exp

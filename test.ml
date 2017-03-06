@@ -15,11 +15,17 @@ let main () =
   let f_desc = open_in !f_name in
   let lexbuf = Lexing.from_channel f_desc in
   let prog = Parser.exp Lexer.token lexbuf in
+  printf "Test expression : @. ";
   Syntax.printExp prog;
   let new_prog = Newsyntax.of_exp prog in
+  printf "@. New syntax expression : @. ";
   Newsyntax.printExp new_prog;
   let ind = Newsyntax.cal_index new_prog in
-  Newsyntax.printExp ind
+  printf "@. After calculating De Bruijn index : @. ";
+  Newsyntax.printExp ind;
+  printf "@. Intrepretation : @. ";
+  Syntax.printCste (Newsyntax.interpretation ind);
+  print_newline ()
 
 let () =
   main ()
