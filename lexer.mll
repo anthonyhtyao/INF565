@@ -21,6 +21,8 @@ rule token = parse
 | "let"          {LET(extent lexbuf)}
 | "rec"          {REC(extent lexbuf)}
 | "in"           {IN(extent lexbuf)}
+| "("            {LEFT(extent lexbuf)}
+| ")"            {RIGHT(extent lexbuf)}
 | "fun"          {FUN(extent lexbuf)}
 | "->"           {ARROW(extent lexbuf)}
 | "true"         {TRUE(extent lexbuf)}
