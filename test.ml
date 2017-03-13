@@ -24,7 +24,7 @@ let main () =
   printf "@. After calculating De Bruijn index : @. ";
   Newsyntax.printExp ind;
   printf "@. Intrepretation : @. ";
-  Syntax.printCste (Newsyntax.interpretation ind);
+  Newsyntax.printValeur (Newsyntax.interpretation ind);
   print_newline ()
 
 let () =

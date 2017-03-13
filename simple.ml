@@ -8,8 +8,11 @@ x-3
 let y = 6 in
 let y = y+5 in
 y
+*)
 let y = 1 in
 let f = fun x -> x+y in
-f f y
+let z = 3 in
+f z
+(*
+let x = true in x && false
 *)
-let x = 5 in x
