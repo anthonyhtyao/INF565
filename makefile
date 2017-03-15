@@ -29,6 +29,7 @@ AUTOGEN= $(AUTOGEN_ML) $(AUTOGEN_MLI)
 ML_FILES=	localizing.ml \
 		syntax.ml \
 		newsyntax.ml \
+		typage.ml \
 		$(AUTOGEN_ML) \
 		test.ml
 

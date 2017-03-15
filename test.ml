@@ -23,6 +23,9 @@ let main () =
   let ind = Newsyntax.cal_index new_prog in
   printf "@. After calculating De Bruijn index : @. ";
   Newsyntax.printExp ind;
+  print_newline ();
+  Typage.printType (Typage.typage ind);
+  print_newline ();
   printf "@. Intrepretation : @. ";
   Newsyntax.printValeur (Newsyntax.interpretation ind);
   print_newline ()

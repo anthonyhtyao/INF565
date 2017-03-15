@@ -74,7 +74,7 @@ let cal_index exp =
     | Cond (e1,e2,e3) -> Cond(aux m e1,aux m e2, aux m e3) 
     | Appl (e1,e2) -> Appl(aux m e1,aux m e2)
     | Oper (o,e1,e2) -> Oper(o,aux m e1,aux m e2)
-    | Inst (i,_) -> let n = Smap.find i m in Inst(i,n)
+    | Inst (i,_) -> let n = try Smap.find i m with _ -> -1 in Inst(i,n)
     | Fun (i,e) ->  Fun(i,aux (Smap.add (fst i) 0 (incre m)) e)
     | Let (i,e1,e2) -> let mi = incre m in
                        Let (i,aux m e1,aux (Smap.add (fst i) 0 mi) e2)
