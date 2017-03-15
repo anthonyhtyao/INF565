@@ -23,6 +23,9 @@ rule token = parse
 | "in"           {IN(extent lexbuf)}
 | "("            {LEFT(extent lexbuf)}
 | ")"            {RIGHT(extent lexbuf)}
+| "if"           {IF(extent lexbuf)}
+| "then"         {THEN(extent lexbuf)}
+| "else"         {ELSE(extent lexbuf)}
 | "fun"          {FUN(extent lexbuf)}
 | "->"           {ARROW(extent lexbuf)}
 | "true"         {TRUE(extent lexbuf)}

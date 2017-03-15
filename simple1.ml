@@ -1,1 +1,1 @@
-let x = y+1 in z
+let x = (if true then 1 else 0) in x

@@ -20,6 +20,7 @@ type exp =
   | Fun of inst*exp (* fun x -> e *)
   | Appl of exp*exp (* e e *)
   | Oper of oper*exp*exp (* e + e*)
+  | Cond of exp*exp*exp (*if e1 then e2 else e3*)
   | Inst of inst
   | Cste of cste
 
@@ -57,6 +58,13 @@ let rec printExp s = match s with
                     printf " in@.";
                     printExp e2;
                     print_newline ()
+  | Cond (e1,e2,e3)-> printf "if@.  ";
+                      printExp e1;
+                      printf " @.then@.  ";
+                      printExp e2;
+                      printf " @.else@.  ";
+                      printExp e3;
+                      print_newline ()
 
 let plus a b =  match a,b with
   | Int i1, Int i2 -> Int(i1+i2)

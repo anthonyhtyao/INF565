@@ -25,6 +25,7 @@ let rec of_exp = function
   | Syntax.Oper(Syntax.And,e1,e2) -> Cond(of_exp e1,of_exp e2, Cste(Syntax.False))
   | Syntax.Oper(Syntax.Or,e1,e2) -> Cond(of_exp e1,Cste(Syntax.True),of_exp e2)
   | Syntax.Oper(o,e1,e2) -> Oper(o,of_exp e1,of_exp e2)
+  | Syntax.Cond(e1,e2,e3) -> Cond(of_exp e1,of_exp e2,of_exp e3)
   | Syntax.Inst i  -> Inst((i,0))
   | Syntax.Cste c  -> Cste(c)
 
