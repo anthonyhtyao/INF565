@@ -26,7 +26,7 @@ let main () =
   print_newline ();
   printf "@. Intrepretation : @. ";
   Newsyntax.printValeur (Newsyntax.interpretation ind);
-  printf "@. Typa : @.";
+  printf "@. Typage : @.";
   Typage.printType (Typage.typage ind);
   print_newline ();
   printf "Compiling ... @.";
