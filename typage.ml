@@ -51,14 +51,23 @@ let typage exp =
                   Arrow(find a, b)
     | Oper(o,e1,e2) -> begin
       match o with
+      | Syntax.Equals -> let tmp = union (aux env e1) (aux env e2) in Bool
       | Syntax.Plus | Minus | Times -> union (aux env e1) (aux env e2)
           
       end
+    | Appl (e1,e2) -> begin match (aux env e1),(aux env e2) with
+                      | Arrow(t1,t2), Arrow(t3,t4) -> let tmp = union t1 t4 in t2
+                      | Arrow(t1,t2), a -> union t1 a
+                      end
     | Cond (e1,e2,e3) ->
         assert (union (aux env e1) Bool = Bool);
         union (aux env e2) (aux env e3)
     | Let (i,e1,e2) -> ind:=!ind+1; let a = Alpha(!ind) in let b = aux env e1 in
                        aux ((union a b)::env) e2
+    | Letrec (i1,i2,e1,e2) -> ind:=!ind+1; let x = Alpha(!ind) in
+                              ind:=!ind+1; let f = Arrow(x,Alpha(!ind)) in
+                              let b = aux (f::env) e2 in
+                              union b (aux (Arrow(find x,b)::env) e2)
   in
   let t = aux [] exp in
   t
