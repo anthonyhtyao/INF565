@@ -42,7 +42,7 @@ let printOper o = match o with
 let rec printExp s = match s with
   | Cste c -> printCste c
   | Inst i -> print_string i
-  | Oper (o,e1,e2) -> printExp e1;printOper o;printExp e2;print_newline ()
+  | Oper (o,e1,e2) -> print_string "(";printExp e1;printOper o;printExp e2;print_string ")";print_newline ()
   | Appl (e1,e2) -> print_string "App ";
                     printExp e1;
                     printExp e2;

@@ -1,1 +1,1 @@
-let rec f x = if x = 0 then 0 else 1 + (f (x-1)) in f 3
+let x = if (2=1) then 1 else 0 in x
