@@ -1,1 +1,1 @@
-let x = (if true then 1 else 0) in x
+let rec f x = if x = 0 then 1 else x*(f (x-1)) in f 3

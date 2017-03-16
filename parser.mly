@@ -12,7 +12,7 @@ let lift_array t l = List.fold_left (fun t' () -> Array_type t') t l
 %token <bool*Localizing.extent>    BOOLEAN_LITERAL
 %token <string*Localizing.extent>  IDENTIFIER INT
 %token <Localizing.extent>         LET REC IN FUN ARROW TRUE FALSE LEFT RIGHT IF THEN ELSE
-%token <unit*Localizing.extent>    ANDAND OROR PLUS MINUS MULT EQ
+%token <unit*Localizing.extent>    ANDAND OROR PLUS MINUS MULT EQ 
 %token EOF
 
 %start exp
@@ -40,6 +40,7 @@ operation:
 | PLUS   {Plus}
 | MINUS  {Minus}
 | MULT   {Times}
+| EQ     {Equals}
 
 constant:
 | TRUE   {True}

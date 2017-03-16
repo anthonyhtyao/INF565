@@ -8,6 +8,7 @@ type oper =
   | Times
   | And
   | Or
+  | Equals
 
 type cste =
   | True
@@ -35,6 +36,7 @@ let printOper o = match o with
   | Times -> printf " * "
   | And -> printf " && "
   | Or -> printf " || "
+  | Equals -> printf " = "
 
 
 let rec printExp s = match s with
@@ -65,13 +67,4 @@ let rec printExp s = match s with
                       printf " @.else@.  ";
                       printExp e3;
                       print_newline ()
-
-let plus a b =  match a,b with
-  | Int i1, Int i2 -> Int(i1+i2)
-
-let minus a b = match a,b with
-  | Int i1, Int i2 -> Int(i1-i2)
-
-let times a b = match a,b with
-  | Int i1, Int i2 -> Int(i1*i2)
 
