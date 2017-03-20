@@ -30,6 +30,7 @@ ML_FILES=	localizing.ml \
 		syntax.ml \
 		newsyntax.ml \
 		typage.ml \
+		interpreter.ml \
 		compile.ml \
 		$(AUTOGEN_ML) \
 		test.ml

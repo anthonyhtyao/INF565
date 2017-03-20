@@ -25,7 +25,7 @@ let main () =
   Newsyntax.printExp ind;
   print_newline ();
   printf "@. Intrepretation : @. ";
-  Newsyntax.printValeur (Newsyntax.interpretation ind);
+  Interpreter.printValeur (Interpreter.interpretation ind);
   printf "@. Typage : @.";
   Typage.printType (Typage.typage ind);
   print_newline ();
