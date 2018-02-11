@@ -1,0 +1,785 @@
+   0  $accept : %entry% $end
+
+   1  exp : IDENTIFIER
+   2      | constant
+   3      | exp operation exp
+   4      | exp exp
+   5      | IF exp THEN exp ELSE exp
+   6      | FUN IDENTIFIER ARROW exp
+   7      | LET REC IDENTIFIER IDENTIFIER EQ exp IN exp
+   8      | LET IDENTIFIER EQ exp IN exp
+   9      | LEFT exp RIGHT
+
+  10  operation : ANDAND
+  11            | OROR
+  12            | PLUS
+  13            | MINUS
+  14            | MULT
+  15            | EQ
+
+  16  constant : TRUE
+  17           | FALSE
+  18           | INT
+
+  19  %entry% : '\001' exp
+
+state 0
+	$accept : . %entry% $end  (0)
+
+	'\001'  shift 1
+	.  error
+
+	%entry%  goto 2
+
+
+state 1
+	%entry% : '\001' . exp  (19)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	.  error
+
+	exp  goto 11
+	constant  goto 12
+
+
+state 2
+	$accept : %entry% . $end  (0)
+
+	$end  accept
+
+
+state 3
+	exp : IDENTIFIER .  (1)
+
+	.  reduce 1
+
+
+state 4
+	constant : INT .  (18)
+
+	.  reduce 18
+
+
+state 5
+	exp : LET . REC IDENTIFIER IDENTIFIER EQ exp IN exp  (7)
+	exp : LET . IDENTIFIER EQ exp IN exp  (8)
+
+	IDENTIFIER  shift 13
+	REC  shift 14
+	.  error
+
+
+state 6
+	exp : FUN . IDENTIFIER ARROW exp  (6)
+
+	IDENTIFIER  shift 15
+	.  error
+
+
+state 7
+	constant : TRUE .  (16)
+
+	.  reduce 16
+
+
+state 8
+	constant : FALSE .  (17)
+
+	.  reduce 17
+
+
+state 9
+	exp : LEFT . exp RIGHT  (9)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	.  error
+
+	exp  goto 16
+	constant  goto 12
+
+
+state 10
+	exp : IF . exp THEN exp ELSE exp  (5)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	.  error
+
+	exp  goto 17
+	constant  goto 12
+
+
+state 11
+	exp : exp . operation exp  (3)
+	exp : exp . exp  (4)
+	%entry% : '\001' exp .  (19)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	ANDAND  shift 18
+	OROR  shift 19
+	PLUS  shift 20
+	MINUS  shift 21
+	MULT  shift 22
+	EQ  shift 23
+	$end  reduce 19
+
+	exp  goto 24
+	operation  goto 25
+	constant  goto 12
+
+
+state 12
+	exp : constant .  (2)
+
+	.  reduce 2
+
+
+state 13
+	exp : LET IDENTIFIER . EQ exp IN exp  (8)
+
+	EQ  shift 26
+	.  error
+
+
+state 14
+	exp : LET REC . IDENTIFIER IDENTIFIER EQ exp IN exp  (7)
+
+	IDENTIFIER  shift 27
+	.  error
+
+
+state 15
+	exp : FUN IDENTIFIER . ARROW exp  (6)
+
+	ARROW  shift 28
+	.  error
+
+
+state 16
+	exp : exp . operation exp  (3)
+	exp : exp . exp  (4)
+	exp : LEFT exp . RIGHT  (9)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	RIGHT  shift 29
+	IF  shift 10
+	ANDAND  shift 18
+	OROR  shift 19
+	PLUS  shift 20
+	MINUS  shift 21
+	MULT  shift 22
+	EQ  shift 23
+	.  error
+
+	exp  goto 24
+	operation  goto 25
+	constant  goto 12
+
+
+state 17
+	exp : exp . operation exp  (3)
+	exp : exp . exp  (4)
+	exp : IF exp . THEN exp ELSE exp  (5)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	THEN  shift 30
+	ANDAND  shift 18
+	OROR  shift 19
+	PLUS  shift 20
+	MINUS  shift 21
+	MULT  shift 22
+	EQ  shift 23
+	.  error
+
+	exp  goto 24
+	operation  goto 25
+	constant  goto 12
+
+
+state 18
+	operation : ANDAND .  (10)
+
+	.  reduce 10
+
+
+state 19
+	operation : OROR .  (11)
+
+	.  reduce 11
+
+
+state 20
+	operation : PLUS .  (12)
+
+	.  reduce 12
+
+
+state 21
+	operation : MINUS .  (13)
+
+	.  reduce 13
+
+
+state 22
+	operation : MULT .  (14)
+
+	.  reduce 14
+
+
+state 23
+	operation : EQ .  (15)
+
+	.  reduce 15
+
+
+24: shift/reduce conflict (shift 3, reduce 4) on IDENTIFIER
+24: shift/reduce conflict (shift 4, reduce 4) on INT
+24: shift/reduce conflict (shift 5, reduce 4) on LET
+24: shift/reduce conflict (shift 6, reduce 4) on FUN
+24: shift/reduce conflict (shift 7, reduce 4) on TRUE
+24: shift/reduce conflict (shift 8, reduce 4) on FALSE
+24: shift/reduce conflict (shift 9, reduce 4) on LEFT
+24: shift/reduce conflict (shift 10, reduce 4) on IF
+24: shift/reduce conflict (shift 18, reduce 4) on ANDAND
+24: shift/reduce conflict (shift 19, reduce 4) on OROR
+24: shift/reduce conflict (shift 20, reduce 4) on PLUS
+24: shift/reduce conflict (shift 21, reduce 4) on MINUS
+24: shift/reduce conflict (shift 22, reduce 4) on MULT
+24: shift/reduce conflict (shift 23, reduce 4) on EQ
+state 24
+	exp : exp . operation exp  (3)
+	exp : exp . exp  (4)
+	exp : exp exp .  (4)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	ANDAND  shift 18
+	OROR  shift 19
+	PLUS  shift 20
+	MINUS  shift 21
+	MULT  shift 22
+	EQ  shift 23
+	$end  reduce 4
+	IN  reduce 4
+	RIGHT  reduce 4
+	THEN  reduce 4
+	ELSE  reduce 4
+
+	exp  goto 24
+	operation  goto 25
+	constant  goto 12
+
+
+state 25
+	exp : exp operation . exp  (3)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	.  error
+
+	exp  goto 31
+	constant  goto 12
+
+
+state 26
+	exp : LET IDENTIFIER EQ . exp IN exp  (8)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	.  error
+
+	exp  goto 32
+	constant  goto 12
+
+
+state 27
+	exp : LET REC IDENTIFIER . IDENTIFIER EQ exp IN exp  (7)
+
+	IDENTIFIER  shift 33
+	.  error
+
+
+state 28
+	exp : FUN IDENTIFIER ARROW . exp  (6)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	.  error
+
+	exp  goto 34
+	constant  goto 12
+
+
+state 29
+	exp : LEFT exp RIGHT .  (9)
+
+	.  reduce 9
+
+
+state 30
+	exp : IF exp THEN . exp ELSE exp  (5)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	.  error
+
+	exp  goto 35
+	constant  goto 12
+
+
+31: shift/reduce conflict (shift 3, reduce 3) on IDENTIFIER
+31: shift/reduce conflict (shift 4, reduce 3) on INT
+31: shift/reduce conflict (shift 5, reduce 3) on LET
+31: shift/reduce conflict (shift 6, reduce 3) on FUN
+31: shift/reduce conflict (shift 7, reduce 3) on TRUE
+31: shift/reduce conflict (shift 8, reduce 3) on FALSE
+31: shift/reduce conflict (shift 9, reduce 3) on LEFT
+31: shift/reduce conflict (shift 10, reduce 3) on IF
+31: shift/reduce conflict (shift 18, reduce 3) on ANDAND
+31: shift/reduce conflict (shift 19, reduce 3) on OROR
+31: shift/reduce conflict (shift 20, reduce 3) on PLUS
+31: shift/reduce conflict (shift 21, reduce 3) on MINUS
+31: shift/reduce conflict (shift 22, reduce 3) on MULT
+31: shift/reduce conflict (shift 23, reduce 3) on EQ
+state 31
+	exp : exp . operation exp  (3)
+	exp : exp operation exp .  (3)
+	exp : exp . exp  (4)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	ANDAND  shift 18
+	OROR  shift 19
+	PLUS  shift 20
+	MINUS  shift 21
+	MULT  shift 22
+	EQ  shift 23
+	$end  reduce 3
+	IN  reduce 3
+	RIGHT  reduce 3
+	THEN  reduce 3
+	ELSE  reduce 3
+
+	exp  goto 24
+	operation  goto 25
+	constant  goto 12
+
+
+state 32
+	exp : exp . operation exp  (3)
+	exp : exp . exp  (4)
+	exp : LET IDENTIFIER EQ exp . IN exp  (8)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	IN  shift 36
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	ANDAND  shift 18
+	OROR  shift 19
+	PLUS  shift 20
+	MINUS  shift 21
+	MULT  shift 22
+	EQ  shift 23
+	.  error
+
+	exp  goto 24
+	operation  goto 25
+	constant  goto 12
+
+
+state 33
+	exp : LET REC IDENTIFIER IDENTIFIER . EQ exp IN exp  (7)
+
+	EQ  shift 37
+	.  error
+
+
+34: shift/reduce conflict (shift 3, reduce 6) on IDENTIFIER
+34: shift/reduce conflict (shift 4, reduce 6) on INT
+34: shift/reduce conflict (shift 5, reduce 6) on LET
+34: shift/reduce conflict (shift 6, reduce 6) on FUN
+34: shift/reduce conflict (shift 7, reduce 6) on TRUE
+34: shift/reduce conflict (shift 8, reduce 6) on FALSE
+34: shift/reduce conflict (shift 9, reduce 6) on LEFT
+34: shift/reduce conflict (shift 10, reduce 6) on IF
+34: shift/reduce conflict (shift 18, reduce 6) on ANDAND
+34: shift/reduce conflict (shift 19, reduce 6) on OROR
+34: shift/reduce conflict (shift 20, reduce 6) on PLUS
+34: shift/reduce conflict (shift 21, reduce 6) on MINUS
+34: shift/reduce conflict (shift 22, reduce 6) on MULT
+34: shift/reduce conflict (shift 23, reduce 6) on EQ
+state 34
+	exp : exp . operation exp  (3)
+	exp : exp . exp  (4)
+	exp : FUN IDENTIFIER ARROW exp .  (6)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	ANDAND  shift 18
+	OROR  shift 19
+	PLUS  shift 20
+	MINUS  shift 21
+	MULT  shift 22
+	EQ  shift 23
+	$end  reduce 6
+	IN  reduce 6
+	RIGHT  reduce 6
+	THEN  reduce 6
+	ELSE  reduce 6
+
+	exp  goto 24
+	operation  goto 25
+	constant  goto 12
+
+
+state 35
+	exp : exp . operation exp  (3)
+	exp : exp . exp  (4)
+	exp : IF exp THEN exp . ELSE exp  (5)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	ELSE  shift 38
+	ANDAND  shift 18
+	OROR  shift 19
+	PLUS  shift 20
+	MINUS  shift 21
+	MULT  shift 22
+	EQ  shift 23
+	.  error
+
+	exp  goto 24
+	operation  goto 25
+	constant  goto 12
+
+
+state 36
+	exp : LET IDENTIFIER EQ exp IN . exp  (8)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	.  error
+
+	exp  goto 39
+	constant  goto 12
+
+
+state 37
+	exp : LET REC IDENTIFIER IDENTIFIER EQ . exp IN exp  (7)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	.  error
+
+	exp  goto 40
+	constant  goto 12
+
+
+state 38
+	exp : IF exp THEN exp ELSE . exp  (5)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	.  error
+
+	exp  goto 41
+	constant  goto 12
+
+
+39: shift/reduce conflict (shift 3, reduce 8) on IDENTIFIER
+39: shift/reduce conflict (shift 4, reduce 8) on INT
+39: shift/reduce conflict (shift 5, reduce 8) on LET
+39: shift/reduce conflict (shift 6, reduce 8) on FUN
+39: shift/reduce conflict (shift 7, reduce 8) on TRUE
+39: shift/reduce conflict (shift 8, reduce 8) on FALSE
+39: shift/reduce conflict (shift 9, reduce 8) on LEFT
+39: shift/reduce conflict (shift 10, reduce 8) on IF
+39: shift/reduce conflict (shift 18, reduce 8) on ANDAND
+39: shift/reduce conflict (shift 19, reduce 8) on OROR
+39: shift/reduce conflict (shift 20, reduce 8) on PLUS
+39: shift/reduce conflict (shift 21, reduce 8) on MINUS
+39: shift/reduce conflict (shift 22, reduce 8) on MULT
+39: shift/reduce conflict (shift 23, reduce 8) on EQ
+state 39
+	exp : exp . operation exp  (3)
+	exp : exp . exp  (4)
+	exp : LET IDENTIFIER EQ exp IN exp .  (8)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	ANDAND  shift 18
+	OROR  shift 19
+	PLUS  shift 20
+	MINUS  shift 21
+	MULT  shift 22
+	EQ  shift 23
+	$end  reduce 8
+	IN  reduce 8
+	RIGHT  reduce 8
+	THEN  reduce 8
+	ELSE  reduce 8
+
+	exp  goto 24
+	operation  goto 25
+	constant  goto 12
+
+
+state 40
+	exp : exp . operation exp  (3)
+	exp : exp . exp  (4)
+	exp : LET REC IDENTIFIER IDENTIFIER EQ exp . IN exp  (7)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	IN  shift 42
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	ANDAND  shift 18
+	OROR  shift 19
+	PLUS  shift 20
+	MINUS  shift 21
+	MULT  shift 22
+	EQ  shift 23
+	.  error
+
+	exp  goto 24
+	operation  goto 25
+	constant  goto 12
+
+
+41: shift/reduce conflict (shift 3, reduce 5) on IDENTIFIER
+41: shift/reduce conflict (shift 4, reduce 5) on INT
+41: shift/reduce conflict (shift 5, reduce 5) on LET
+41: shift/reduce conflict (shift 6, reduce 5) on FUN
+41: shift/reduce conflict (shift 7, reduce 5) on TRUE
+41: shift/reduce conflict (shift 8, reduce 5) on FALSE
+41: shift/reduce conflict (shift 9, reduce 5) on LEFT
+41: shift/reduce conflict (shift 10, reduce 5) on IF
+41: shift/reduce conflict (shift 18, reduce 5) on ANDAND
+41: shift/reduce conflict (shift 19, reduce 5) on OROR
+41: shift/reduce conflict (shift 20, reduce 5) on PLUS
+41: shift/reduce conflict (shift 21, reduce 5) on MINUS
+41: shift/reduce conflict (shift 22, reduce 5) on MULT
+41: shift/reduce conflict (shift 23, reduce 5) on EQ
+state 41
+	exp : exp . operation exp  (3)
+	exp : exp . exp  (4)
+	exp : IF exp THEN exp ELSE exp .  (5)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	ANDAND  shift 18
+	OROR  shift 19
+	PLUS  shift 20
+	MINUS  shift 21
+	MULT  shift 22
+	EQ  shift 23
+	$end  reduce 5
+	IN  reduce 5
+	RIGHT  reduce 5
+	THEN  reduce 5
+	ELSE  reduce 5
+
+	exp  goto 24
+	operation  goto 25
+	constant  goto 12
+
+
+state 42
+	exp : LET REC IDENTIFIER IDENTIFIER EQ exp IN . exp  (7)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	.  error
+
+	exp  goto 43
+	constant  goto 12
+
+
+43: shift/reduce conflict (shift 3, reduce 7) on IDENTIFIER
+43: shift/reduce conflict (shift 4, reduce 7) on INT
+43: shift/reduce conflict (shift 5, reduce 7) on LET
+43: shift/reduce conflict (shift 6, reduce 7) on FUN
+43: shift/reduce conflict (shift 7, reduce 7) on TRUE
+43: shift/reduce conflict (shift 8, reduce 7) on FALSE
+43: shift/reduce conflict (shift 9, reduce 7) on LEFT
+43: shift/reduce conflict (shift 10, reduce 7) on IF
+43: shift/reduce conflict (shift 18, reduce 7) on ANDAND
+43: shift/reduce conflict (shift 19, reduce 7) on OROR
+43: shift/reduce conflict (shift 20, reduce 7) on PLUS
+43: shift/reduce conflict (shift 21, reduce 7) on MINUS
+43: shift/reduce conflict (shift 22, reduce 7) on MULT
+43: shift/reduce conflict (shift 23, reduce 7) on EQ
+state 43
+	exp : exp . operation exp  (3)
+	exp : exp . exp  (4)
+	exp : LET REC IDENTIFIER IDENTIFIER EQ exp IN exp .  (7)
+
+	IDENTIFIER  shift 3
+	INT  shift 4
+	LET  shift 5
+	FUN  shift 6
+	TRUE  shift 7
+	FALSE  shift 8
+	LEFT  shift 9
+	IF  shift 10
+	ANDAND  shift 18
+	OROR  shift 19
+	PLUS  shift 20
+	MINUS  shift 21
+	MULT  shift 22
+	EQ  shift 23
+	$end  reduce 7
+	IN  reduce 7
+	RIGHT  reduce 7
+	THEN  reduce 7
+	ELSE  reduce 7
+
+	exp  goto 24
+	operation  goto 25
+	constant  goto 12
+
+
+State 24 contains 14 shift/reduce conflicts.
+State 31 contains 14 shift/reduce conflicts.
+State 34 contains 14 shift/reduce conflicts.
+State 39 contains 14 shift/reduce conflicts.
+State 41 contains 14 shift/reduce conflicts.
+State 43 contains 14 shift/reduce conflicts.
+
+
+25 terminals, 5 nonterminals
+20 grammar rules, 44 states
